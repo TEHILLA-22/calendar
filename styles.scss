@@ -1,0 +1,148 @@
+// Variables
+$primary-color: #3b82f6;
+$secondary-color: #6366f1;
+$text-color: #374151;
+$light-gray: #f3f4f6;
+$border-color: #e5e7eb;
+
+// Base styles
+.calendar-container {
+    transition: all 0.3s ease;
+    
+    .calendar-grid-header {
+        div {
+            @apply bg-white py-2 text-center font-medium text-gray-600;
+        }
+    }
+    
+    .calendar-grid {
+        min-height: 400px;
+        
+        .calendar-day {
+            @apply bg-white p-2 h-24 overflow-y-auto;
+            border-bottom: 1px solid $border-color;
+            border-right: 1px solid $border-color;
+            
+            &:nth-child(7n) {
+                border-right: none;
+            }
+            
+            &:hover {
+                @apply bg-gray-50;
+            }
+            
+            &.current-month {
+                @apply bg-white;
+            }
+            
+            &.other-month {
+                @apply bg-gray-50 text-gray-400;
+            }
+            
+            &.today {
+                @apply bg-blue-50 border-t-2 border-t-blue-500;
+                
+                .day-number {
+                    @apply bg-blue-500 text-white;
+                }
+            }
+            
+            .day-number {
+                @apply inline-flex items-center justify-center w-6 h-6 rounded-full text-sm font-medium;
+            }
+            
+            .event {
+                @apply text-xs p-1 rounded mb-1 truncate cursor-pointer text-white;
+                
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+}
+
+// Year view styles
+.year-view {
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    
+    .year-month {
+        @apply bg-white p-4 rounded-lg shadow;
+        
+        h3 {
+            @apply text-center font-medium mb-2;
+        }
+        
+        .year-month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+            
+            div {
+                @apply text-center text-xs p-1;
+                
+                &.other-month {
+                    @apply text-gray-300;
+                }
+                
+                &.current-day {
+                    @apply bg-blue-500 text-white rounded-full;
+                }
+            }
+        }
+    }
+    
+    &.active {
+        display: grid;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .calendar-grid .calendar-day {
+        height: 80px;
+        font-size: 0.8rem;
+    }
+    
+    .year-view {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar-grid .calendar-day {
+        height: 60px;
+        padding: 0.25rem;
+        
+        .day-number {
+            width: 1.25rem;
+            height: 1.25rem;
+            font-size: 0.7rem;
+        }
+    }
+    
+    .year-view {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .calendar-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        
+        .month-year-selector {
+            order: 1;
+        }
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}

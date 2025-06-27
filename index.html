@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tehillz Calendar | 2024-2040</title>
+    <meta name="description" content="A beautiful, responsive calendar from 2024 to 2040">
+    
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="tailwind.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.scss">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-2">Tehillz Calendar</h1>
+            <p class="text-lg text-gray-600">2024 - 2040</p>
+        </header>
+        
+        <div class="calendar-container bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="calendar-header flex justify-between items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+                <button id="prev-year" class="p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <div class="flex items-center">
+                    <select id="month-select" class="bg-transparent border-none text-white font-semibold text-lg focus:ring-0">
+                        <!-- Months will be populated by JS -->
+                    </select>
+                    <select id="year-select" class="bg-transparent border-none text-white font-semibold text-lg focus:ring-0 ml-2">
+                        <!-- Years will be populated by JS -->
+                    </select>
+                </div>
+                
+                <button id="next-year" class="p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="calendar-grid-header grid grid-cols-7 gap-px bg-gray-200">
+                <!-- Weekday headers will be populated by JS -->
+            </div>
+            
+            <div id="calendar-grid" class="calendar-grid grid grid-cols-7 gap-px bg-gray-200">
+                <!-- Calendar days will be populated by JS -->
+            </div>
+            
+            <div class="calendar-footer p-4 bg-gray-50 flex justify-between items-center">
+                <button id="today-btn" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                    Today
+                </button>
+                <div class="text-sm text-gray-600">
+                    <span id="current-date-display"></span>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="view-month" class="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition active">Month</button>
+                    <button id="view-year" class="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Year</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <p>Click on a date to add events. Drag to navigate.</p>
+        </div>
+    </div>
+    
+    <!-- Event Modal (hidden by default) -->
+    <div id="event-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 class="text-lg font-semibold">Add Event</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Event Title</label>
+                    <input type="text" id="event-title" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Date</label>
+                    <input type="text" id="event-date" class="w-full px-3 py-2 border rounded-lg bg-gray-100" readonly>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Color</label>
+                    <div class="flex space-x-2">
+                        <div class="color-option bg-blue-500 w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-300" data-color="blue-500"></div>
+                        <div class="color-option bg-red-500 w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-300" data-color="red-500"></div>
+                        <div class="color-option bg-green-500 w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-300" data-color="green-500"></div>
+                        <div class="color-option bg-yellow-500 w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-300" data-color="yellow-500"></div>
+                        <div class="color-option bg-purple-500 w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-300" data-color="purple-500"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t flex justify-end space-x-2">
+                <button id="cancel-event" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                <button id="save-event" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
